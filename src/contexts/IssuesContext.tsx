@@ -6,10 +6,14 @@ interface Issue {
   title: string;
   postLink: string;
   createdAt: string;
+  postCreator: string;
+  postID: number;
+  numberOfComments: number;
 }
 
 interface postType {
   issues: Issue[];
+  postNumber: number;
 }
 
 interface issuesProviderProps {
@@ -25,7 +29,7 @@ export function IssuesProvider({ children }: issuesProviderProps) {
   async function loadIssues() {
     try {
       const { data, status } = await axios.get(
-        "https://api.github.com/repos/sergio-bogaro/gitBlog/issues/" +
+        "https://api.github.com/repos/sergio-bogaro/CoffeeShop/issues/" +
           postNumber,
         {
           headers: {
@@ -33,11 +37,14 @@ export function IssuesProvider({ children }: issuesProviderProps) {
           },
         }
       );
-      const newIssue = {
+      const newIssue: Issue = {
         text: data.body,
         title: data.title,
         postLink: data.html_url,
         createdAt: data.created_at,
+        postID: data.number,
+        numberOfComments: data.comments,
+        postCreator: data.user.login,
       };
 
       const newNumber = postNumber + 1;
@@ -60,7 +67,7 @@ export function IssuesProvider({ children }: issuesProviderProps) {
   }, [postNumber]);
 
   return (
-    <IssuesContext.Provider value={{ issues }}>
+    <IssuesContext.Provider value={{ issues, postNumber }}>
       {children}
     </IssuesContext.Provider>
   );

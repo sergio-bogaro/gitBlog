@@ -1,12 +1,15 @@
-import { PostContainer } from "./components/postContainer";
 import { IssuesProvider } from "./contexts/IssuesContext";
+import { Router } from "./Router";
+import { BrowserRouter } from "react-router-dom";
+import { GlobalStyle } from "./styles/global";
 
 export function App() {
   return (
-    <div>
+    <BrowserRouter>
       <IssuesProvider>
-        <PostContainer></PostContainer>
+        <Router></Router>
+        <GlobalStyle />
       </IssuesProvider>
-    </div>
+    </BrowserRouter>
   );
 }
